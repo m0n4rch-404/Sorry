@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Charos, kechir meni 💌</title>
+<meta name="theme-color" content="#1a0a14">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --rose:#ff4d7d; --rose-soft:#ff8fab; --gold:#f7d9a8; --bg1:#1a0a14; --bg2:#3b0f2a; --bg3:#6b1b43;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Playfair Display',serif; color:#fff; overflow-x:hidden;
+    background:radial-gradient(ellipse at 20% 10%,var(--bg3) 0%,var(--bg2) 40%,var(--bg1) 100%) fixed;
+  }
+  canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:0}
+  .glow{position:fixed;border-radius:50%;filter:blur(90px);opacity:.35;z-index:0;animation:drift 14s ease-in-out infinite alternate}
+  .glow.a{width:340px;height:340px;background:#ff4d7d;top:-80px;left:-80px}
+  .glow.b{width:380px;height:380px;background:#b5179e;bottom:-120px;right:-100px;animation-delay:-6s}
+  @keyframes drift{to{transform:translate(40px,30px) scale(1.15)}}
+
+  main{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px 16px}
+  .card{
+    width:100%;max-width:560px;text-align:center;padding:44px 28px 36px;border-radius:28px;
+    background:rgba(255,255,255,.07);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border:1px solid rgba(255,255,255,.18);box-shadow:0 20px 70px rgba(0,0,0,.5),inset 0 0 40px rgba(255,77,125,.08);
+    animation:rise 1.2s ease both;
+  }
+  @keyframes rise{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+  .heart-top{font-size:54px;display:inline-block;animation:beat 1.4s infinite;filter:drop-shadow(0 0 18px var(--rose))}
+  @keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.2)}30%{transform:scale(1)}45%{transform:scale(1.14)}}
+  h1{
+    font-family:'Dancing Script',cursive;font-size:clamp(44px,12vw,72px);line-height:1.1;margin:10px 0 6px;
+    background:linear-gradient(90deg,var(--gold),var(--rose-soft),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent;
+    background-size:200% auto;animation:shine 5s linear infinite;
+  }
+  @keyframes shine{to{background-position:200% center}}
+  .sub{font-style:italic;color:var(--rose-soft);letter-spacing:.5px;margin-bottom:26px}
+  .letter{
+    min-height:190px;text-align:left;font-size:clamp(16px,4.2vw,19px);line-height:1.85;color:#ffeaf1;
+    padding:20px 22px;border-left:3px solid var(--rose);background:rgba(0,0,0,.18);border-radius:0 16px 16px 0;white-space:pre-wrap;
+  }
+  .caret::after{content:"▍";color:var(--rose);animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  .ask{margin-top:30px;opacity:0;transform:translateY(14px);transition:all .9s ease;pointer-events:none}
+  .ask.show{opacity:1;transform:none;pointer-events:auto}
+  .ask h2{font-family:'Dancing Script',cursive;font-size:clamp(28px,8vw,40px);margin-bottom:18px;color:var(--gold)}
+  .btns{position:relative;display:flex;gap:16px;justify-content:center;align-items:center;min-height:64px;flex-wrap:wrap}
+  button{
+    font-family:'Playfair Display',serif;font-size:18px;border:none;cursor:pointer;border-radius:50px;padding:14px 34px;transition:transform .2s,box-shadow .3s;
+  }
+  .yes{color:#fff;background:linear-gradient(135deg,var(--rose),#c9184a);box-shadow:0 8px 28px rgba(255,77,125,.55);animation:pulse 2s infinite}
+  .yes:hover{transform:scale(1.08)}
+  @keyframes pulse{50%{box-shadow:0 8px 40px rgba(255,77,125,.9)}}
+  .no{color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3)}
+  .no.run{position:fixed;z-index:5}
+  .hint{margin-top:14px;font-size:14px;color:#ffb3c8;min-height:20px;font-style:italic}
+
+  .final{display:none;margin-top:8px}
+  .final .big{font-family:'Dancing Script',cursive;font-size:clamp(34px,10vw,56px);color:var(--gold);margin:10px 0}
+  .final p{line-height:1.8;color:#ffeaf1;font-size:18px}
+  .sign{margin-top:26px;font-family:'Dancing Script',cursive;font-size:30px;color:var(--rose-soft)}
+  footer{margin-top:26px;font-size:12px;color:rgba(255,255,255,.4)}
+</style>
+</head>
+<body>
+<canvas id="fx"></canvas>
+<div class="glow a"></div><div class="glow b"></div>
+
+<main>
+  <section class="card" id="card">
+    <div class="heart-top">💗</div>
+    <h1>Charos</h1>
+    <div class="sub">sen uchun yozdim bu satrlarni...</div>
+
+    <div id="stage">
+      <div class="letter caret" id="letter"></div>
+      <div class="ask" id="ask">
+        <h2>Meni kechirasanmi? 🥺</h2>
+        <div class="btns">
+          <button class="yes" id="yes">Ha, kechirdim 💖</button>
+          <button class="no" id="no">Yo‘q</button>
+        </div>
+        <div class="hint" id="hint"></div>
+      </div>
+    </div>
+
+    <div class="final" id="final">
+      <div class="heart-top">🌹</div>
+      <div class="big">Rahmat, Charos!</div>
+      <p>Sen menga eng aziz insonsan.<br>
+      Va'da beraman — endi seni yanada ko‘proq asrayman,<br>
+      yanada ko‘proq tinglayman va sevaman. 💞</p>
+      <div class="sign" id="sign">Sening ____</div>
+    </div>
+    <footer>Yurakdan yozilgan ❤</footer>
+  </section>
+</main>
+
+<script>
+/* ====== SHU YERNI O'ZGARTIRING ====== */
+const SENDER = "";   // masalan: "Jasur" — bo'sh qolsa imzo "Sening ____" bo'lib qoladi
+const MESSAGE =
+`Assalomu alaykum, Charos...
+
+Bilaman, xato qildim. Va bu uchun ichim juda og‘riyapti.
+Seni xafa qilganimni o‘ylasam, yuragim siqiladi.
+
+Sening kulgingni yo‘qotishni hech qachon xohlamaganman.
+Sen — mening kunimni yoritadigan eng go‘zal nur eding,
+men esa bir lahzalik xatom bilan o‘sha nurni xiralashtirdim.
+
+Bahona qidirmayman. Faqat samimiy uzr so‘rayman
+va seni yana jilmayib turganingni ko‘rishni istayman. 🌷`;
+/* ==================================== */
+
+/* --- Typewriter --- */
+const letter = document.getElementById('letter'), ask = document.getElementById('ask');
+let i = 0;
+(function type(){
+  if(i < MESSAGE.length){
+    letter.textContent += MESSAGE[i++];
+    const ch = MESSAGE[i-1];
+    setTimeout(type, ch === '\n' ? 350 : ch === '.' || ch === ',' ? 160 : 38);
+  } else {
+    letter.classList.remove('caret');
+    setTimeout(()=>ask.classList.add('show'), 600);
+  }
+})();
+
+/* --- Floating hearts & petals background --- */
+const cv = document.getElementById('fx'), cx = cv.getContext('2d');
+let W, H, parts = [];
+function resize(){ W = cv.width = innerWidth; H = cv.height = innerHeight; }
+addEventListener('resize', resize); resize();
+const SYMS = ['❤','💗','💖','🌸','✨','🌹'];
+function spawn(burst, x, y){
+  parts.push({
+    x: burst ? x : Math.random()*W, y: burst ? y : H+30,
+    s: 12 + Math.random()*(burst?26:22),
+    vx: burst ? (Math.random()-.5)*9 : (Math.random()-.5)*.6,
+    vy: burst ? -Math.random()*9-2 : -(.5+Math.random()*1.2),
+    g: burst ? .18 : 0, a: burst ? 1 : .15+Math.random()*.5,
+    t: SYMS[Math.floor(Math.random()*SYMS.length)], r: Math.random()*6, burst
+  });
+}
+setInterval(()=>{ if(parts.length < 80) spawn(false); }, 350);
+(function loop(){
+  cx.clearRect(0,0,W,H);
+  parts = parts.filter(p => p.y > -50 && p.y < H+80 && p.a > 0);
+  for(const p of parts){
+    p.x += p.vx + Math.sin(p.r += .02)*.4; p.vy += p.g; p.y += p.vy;
+    if(p.burst) p.a -= .008;
+    cx.globalAlpha = Math.max(p.a,0); cx.font = p.s+'px serif'; cx.fillText(p.t, p.x, p.y);
+  }
+  cx.globalAlpha = 1; requestAnimationFrame(loop);
+})();
+
+/* --- "Yo'q" tugmasi qochadi --- */
+const no = document.getElementById('no'), hint = document.getElementById('hint');
+const hints = ['Iltimos... 🥺','Yuragimni sindirma 💔','Yana bir bor o‘ylab ko‘r 🌹','Tugma ham sendan uyalyapti 😅','Faqat "Ha" qoldi, Charos 💖'];
+let tries = 0;
+function dodge(e){
+  e && e.preventDefault();
+  no.classList.add('run');
+  const m = 20, bw = no.offsetWidth, bh = no.offsetHeight;
+  no.style.left = (m + Math.random()*(innerWidth - bw - m*2)) + 'px';
+  no.style.top  = (m + Math.random()*(innerHeight - bh - m*2)) + 'px';
+  hint.textContent = hints[tries++ % hints.length];
+}
+no.addEventListener('mouseenter', dodge);
+no.addEventListener('touchstart', dodge, {passive:false});
+no.addEventListener('click', dodge);
+
+/* --- "Ha" --- */
+document.getElementById('yes').addEventListener('click', () => {
+  document.getElementById('stage').style.display = 'none';
+  no.style.display = 'none';
+  document.querySelector('.sub').textContent = 'sen mening dunyomsan 💫';
+  document.getElementById('final').style.display = 'block';
+  if(SENDER) document.getElementById('sign').textContent = 'Sening ' + SENDER;
+  let n = 0;
+  const iv = setInterval(()=>{
+    for(let k=0;k<8;k++) spawn(true, W/2 + (Math.random()-.5)*200, H*0.6);
+    if(++n > 25) clearInterval(iv);
+  }, 90);
+});
+</script>
+</body>
+</html>
