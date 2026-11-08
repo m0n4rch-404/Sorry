@@ -76,7 +76,7 @@
   <section class="card" id="card">
     <div class="heart-top">💗</div>
     <h1>Charos</h1>
-    <div class="sub">sen uchun yozdim bu satrlarni...</div>
+    <div class="sub">siz uchun...</div>
 
     <div id="stage">
       <div class="letter caret" id="letter"></div>
@@ -93,10 +93,10 @@
     <div class="final" id="final">
       <div class="heart-top">🌹</div>
       <div class="big">Rahmat, Charos!</div>
-      <p>Sen menga eng aziz insonsan.<br>
-      Va'da beraman — endi seni yanada ko‘proq asrayman,<br>
-      yanada ko‘proq tinglayman va sevaman. 💞</p>
-      <div class="sign" id="sign">Sening ____</div>
+      <p>Siz menga eng aziz insonsan.<br>
+      Va'da beraman — endi sizni yanada ko‘proq asrayman,<br>
+      yanada ko‘proq tinglayman. 💞</p>
+      <div class="sign" id="sign">Sizning Telbangiz_</div>
     </div>
     <footer>Yurakdan yozilgan ❤</footer>
   </section>
@@ -106,17 +106,15 @@
 /* ====== SHU YERNI O'ZGARTIRING ====== */
 const SENDER = "";   // masalan: "Jasur" — bo'sh qolsa imzo "Sening ____" bo'lib qoladi
 const MESSAGE =
-`Assalomu alaykum, Charos...
-
+`
 Bilaman, xato qildim. Va bu uchun ichim juda og‘riyapti.
-Seni xafa qilganimni o‘ylasam, yuragim siqiladi.
 
-Sening kulgingni yo‘qotishni hech qachon xohlamaganman.
-Sen — mening kunimni yoritadigan eng go‘zal nur eding,
+Sizning kulginggizni yo‘qotishni hech qachon xohlamayman.
+Siz — mening kunimni yoritadigan eng go‘zal nur siz,
 men esa bir lahzalik xatom bilan o‘sha nurni xiralashtirdim.
 
 Bahona qidirmayman. Faqat samimiy uzr so‘rayman
-va seni yana jilmayib turganingni ko‘rishni istayman. 🌷`;
+va sizni yana jilmayib ko‘rishni istayman. 🌷`;
 /* ==================================== */
 
 /* --- Typewriter --- */
@@ -163,7 +161,7 @@ setInterval(()=>{ if(parts.length < 80) spawn(false); }, 350);
 
 /* --- "Yo'q" tugmasi qochadi --- */
 const no = document.getElementById('no'), hint = document.getElementById('hint');
-const hints = ['Iltimos... 🥺','Yuragimni sindirma 💔','Yana bir bor o‘ylab ko‘r 🌹','Tugma ham sendan uyalyapti 😅','Faqat "Ha" qoldi, Charos 💖'];
+const hints = ['Iltimos... 🥺','Unaqamasda 💔','Yana bir bor o‘ylab ko‘ring 🌹','Tugma ham sizdan uyalyapti 😅','Faqat "Ha" qoldi, Charos 💖'];
 let tries = 0;
 function dodge(e){
   e && e.preventDefault();
@@ -181,7 +179,7 @@ no.addEventListener('click', dodge);
 document.getElementById('yes').addEventListener('click', () => {
   document.getElementById('stage').style.display = 'none';
   no.style.display = 'none';
-  document.querySelector('.sub').textContent = 'sen mening dunyomsan 💫';
+  document.querySelector('.sub').textContent = 'siz mening dunyoyimsiz 💫';
   document.getElementById('final').style.display = 'block';
   if(SENDER) document.getElementById('sign').textContent = 'Sening ' + SENDER;
   let n = 0;
